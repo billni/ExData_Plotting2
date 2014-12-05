@@ -1,0 +1,14 @@
+plot3 <- function() {
+nei <- readRDS("rds/summarySCC_PM25.rds")
+names(nei)<- tolower(names(nei))
+
+scc <- readRDS("rds/Source_Classification_Code.rds")
+names(scc)<- tolower(names(scc))
+
+nei_24510 <- nei[which(nei$fips == "24510"),]
+nei_type <- with(nei_24510, aggregate(emissions, by=list(year, type), sum))
+names(nei_type) <- c("year", "type", "value")
+ggplot(data=nei_type, aes(x=year, y=value, colour=type ))+ geom_line(size = 2) + 
+labs(x="Year", y=" The Value of Emissions") + 
+labs(title = "Annual Emissions by Type")
+}

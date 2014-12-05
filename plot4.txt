@@ -1,0 +1,12 @@
+plot4 <- function() {
+nei <- readRDS("rds/summarySCC_PM25.rds")
+names(nei)<- tolower(names(nei))
+
+scc <- readRDS("rds/Source_Classification_Code.rds")
+names(scc)<- tolower(names(scc))
+
+scc_coal<-scc[grep("Coal", scc$short.name), 1]
+nei_scc <- nei[which(nei$scc %in% scc_coal),]
+nei_scc_annual <- aggregate(nei_scc$emissions, by=list(nei_scc$year), sum)
+plot(nei_scc_annual, type="l", ylab="Total Emissions", xlab="Year", main="Annual Emissions")
+}

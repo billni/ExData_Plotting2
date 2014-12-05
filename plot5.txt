@@ -1,0 +1,12 @@
+plot5 <- function() {
+nei <- readRDS("rds/summarySCC_PM25.rds")
+names(nei)<- tolower(names(nei))
+
+scc <- readRDS("rds/Source_Classification_Code.rds")
+names(scc)<- tolower(names(scc))
+
+scc_motor <- scc[grep("Motor", scc$short.name), 1]
+nei_24510_scc_motor <- nei[which(nei$fips == "24510" & nei$scc %in% scc_motor),]
+nei_scc_annual <- aggregate(nei_24510_scc_motor$emissions, by=list(nei_24510_scc_motor$year), sum)
+plot(nei_scc_annual, type="l", ylab="Total Emissions", xlab="Year", main="From Motor Vehicle Annual Emissions")
+}

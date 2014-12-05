@@ -1,0 +1,13 @@
+plot1 <- function(){
+ nei <- readRDS("rds/summarySCC_PM25.rds")
+ names(nei)<- tolower(names(nei))
+
+ scc <- readRDS("rds/Source_Classification_Code.rds")
+ names(scc)<- tolower(names(scc))
+
+
+ #plot1
+ annual_nei <- aggregate(nei$emissions, by=list(nei$year), sum)
+ plot(annual_nei, type="l", ylab="Total Emissions", xlab="Year", main="Annual Emissions")
+ text(annual_nei, labels=annual_nei$x)
+}

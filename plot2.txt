@@ -1,0 +1,12 @@
+plot2 <- function() {
+nei <- readRDS("rds/summarySCC_PM25.rds")
+names(nei)<- tolower(names(nei))
+
+scc <- readRDS("rds/Source_Classification_Code.rds")
+names(scc)<- tolower(names(scc))
+
+nei_24510 <- nei[which(nei$fips == "24510"),]
+nei2 <- aggregate(nei_24510$emissions, by=list(nei_24510$year), sum)
+plot(nei2, type="l", ylab="Total Emissions", xlab="Year", main="Baltimore City, Maryland Annual Emissions")
+text(nei2, labels=nei2$x)
+}

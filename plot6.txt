@@ -1,0 +1,18 @@
+plot6 <- function() {
+nei <- readRDS("rds/summarySCC_PM25.rds")
+names(nei)<- tolower(names(nei))
+
+scc <- readRDS("rds/Source_Classification_Code.rds")
+names(scc)<- tolower(names(scc))
+
+scc_motor <- scc[grep("Motor", scc$short.name), 1]
+nei_scc_motor <- nei[which(nei$fips %in% c("24510","06037") & nei$scc %in% scc_motor),]
+#nei_scc_motor <- subset(nei, fips %in% c("24510","06037") & scc %in% scc_motor)
+nei_scc_annual <- aggregate(nei_scc_motor$emissions, by=list(nei_scc_motor$year, nei_scc_motor$fips), sum)
+names(nei_scc_annual) <- c("year", "city", "value")
+nei_scc_annual[which(nei_scc_annual$city=="06037"),2] <- "Los Angeles County"
+nei_scc_annual[which(nei_scc_annual$city=="24510"),2] <- "Baltimore City"
+ggplot(nei_scc_annual, aes(x=year, y=value, colour=city)) + geom_line(size = 2) + 
+labs(x="Year", y=" The Value of Emissions") + 
+labs(title = "Annual Emissions by Diffenrent City")
+}
